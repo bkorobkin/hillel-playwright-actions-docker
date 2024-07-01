@@ -19,15 +19,10 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '18'
+          node-version: '16'
 
-      - name: Install dependencies
-        run: npm install
+      - name: Build Docker image
+        run: docker build -t playwright-tests .
 
       - name: Run Playwright tests in Docker
-        run: |
-          docker run --rm \
-            -v ${{ github.workspace }}:/work \
-            -w /work \
-            mcr.microsoft.com/playwright:v1.39.0-jammy \
-            /bin/bash -c "npx playwright install-deps && npx playwright test"
+        run: docker run --rm -v ${{ github.workspace }}:/work -w /work playwright-tests
